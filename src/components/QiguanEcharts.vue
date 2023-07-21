@@ -8,14 +8,37 @@
   <script>
   
   export default {
+    props:['newValue'],
     data() {
       return {
         qigangIsShow:false,
-        chart: null,
-        option: {
+        chart: null
+      };
+    },
+    watch:{
+      newValue(newVal){
+        console.log(newVal);
+          this.chart.setOption({
+          series: [
+            {
+              data: [
+                {
+                  value:newVal
+                }
+              ]
+            }
+          ]
+        });
+      }
+    },
+    mounted() {
+      this.chart = this.$echarts.init(this.$refs.chart);
+      this.chart.setOption({
           series: [
             {
               type: 'gauge',
+              min: 0, // 最小值
+               max: 500, // 最大值
               axisLine: {
                 lineStyle: {
                   width: 25,
@@ -50,7 +73,7 @@
               axisLabel: {
                 color: 'inherit',
                 distance: 40,
-                fontSize: 13
+                fontSize: 10
               },
               detail: {
                 valueAnimation: true,
@@ -59,32 +82,27 @@
               },
               data: [
                 {
-                  value: 70
-                }
-              ]
-            }
-          ]
-        }
-      };
-    },
-    mounted() {
-      this.chart = this.$echarts.init(this.$refs.chart);
-      this.chart.setOption(this.option);
-
-      //模拟接口数据
-      setInterval(() => {
-        this.chart.setOption({
-          series: [
-            {
-              data: [
-                {
-                  value: +(Math.random() * 100).toFixed(2)
+                  value: this.newValue
                 }
               ]
             }
           ]
         });
-      }, 2000);
+        console.log(this.newValue);
+      //模拟接口数据
+      // setInterval(() => {
+      //   this.chart.setOption({
+      //     series: [
+      //       {
+      //         data: [
+      //           {
+      //             value: +(Math.random() * 100).toFixed(2)
+      //           }
+      //         ]
+      //       }
+      //     ]
+      //   });
+      // }, 2000);
     }
   };
   </script>

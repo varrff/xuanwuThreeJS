@@ -24,6 +24,7 @@ import { createReprocessing } from '@/three/reprocessing';
 import { darkMaterial } from '@/three/material'
 import {addParkWater} from '@/three/parkWater'
 import { primaryTexture, secondaryTexture, trunkTexture } from '@/three/texture'
+import {createWebSocket} from '@/api/index'
 let app, camera, scene, renderer, controls, clock, reprocessing, materials={}
 export default {
   name: 'HomeView',
@@ -115,6 +116,14 @@ export default {
 
   },
   mounted() {
+    createWebSocket().then(ws=>{
+      ws.onmessage = e=>{
+        console.log(1);
+            console.log(e);
+        }  
+    }).catch(err=>{
+      console.log(err);
+    })
     this.$EventBus.$on('roomUI', data => {
       
       this.roomIsShow=data.isShow

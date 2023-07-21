@@ -62,6 +62,16 @@ export default class ZThree {
     controls.autoRotateSpeed = 0.5;
     // 开启平移功能
     controls.enablePan = true;
+
+    // 限制缩放范围
+    controls.minDistance = 1;
+    controls.maxDistance = 100;
+    // 限制垂直旋转范围
+    controls.minPolarAngle = 0;
+    controls.maxPolarAngle = Math.PI / 2;
+    // 限制水平旋转范围
+    // controls.minAzimuthAngle = -Math.PI / 2; // -π/2
+    // controls.maxAzimuthAngle = Math.PI / 2; // π/2
     // 将创建的控制对象赋值给this.controls，以便其他方法能够访问和使用这个控制对象
     this.controls = controls;
   }
@@ -76,7 +86,7 @@ export default class ZThree {
 
     directionalLight.position.set(100, 100, -100);
     //room1的光
-    const directionalLight2 = new THREE.DirectionalLight('3e9ae0', 1);
+    const directionalLight2 = new THREE.DirectionalLight("3e9ae0", 1);
     directionalLight.position.set(37.67, 1, 14.88);
     this.scene.add(directionalLight2);
     //开启投影
@@ -84,16 +94,16 @@ export default class ZThree {
     // this.scene.add(directionalLight);
 
     //投影的参数
-    directionalLight.shadow.mapSize.width = 512;
-    directionalLight.shadow.mapSize.HEIGHT = 512;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 500;
-    directionalLight.shadow.camera.top = 100;
-    directionalLight.shadow.camera.bottom = -100;
-    directionalLight.shadow.camera.left = -100;
-    directionalLight.shadow.camera.right = 100;
-    directionalLight.shadow.bias = 0.05;
-    directionalLight.shadow.normalBias = 0.05;
+    // directionalLight.shadow.mapSize.width = 512;
+    // directionalLight.shadow.mapSize.HEIGHT = 512;
+    // directionalLight.shadow.camera.near = 0.5;
+    // directionalLight.shadow.camera.far = 500;
+    // directionalLight.shadow.camera.top = 100;
+    // directionalLight.shadow.camera.bottom = -100;
+    // directionalLight.shadow.camera.left = -100;
+    // directionalLight.shadow.camera.right = 100;
+    // directionalLight.shadow.bias = 0.05;
+    // directionalLight.shadow.normalBias = 0.05;
     // 辅助对象
     // const helper = new THREE.CameraHelper(directionalLight.shadow.camera)
     // this.scene.add(helper)
@@ -133,8 +143,9 @@ export default class ZThree {
         dracoUrl: objFileList[fileIndex].dracoUrl,
         mtlUrl: objFileList[fileIndex].mtlUrl,
         url: objFileList[fileIndex].url,
-        onLoad: function(object) {
-          if (objFileList[fileIndex].onLoad) objFileList[fileIndex].onLoad(object);
+        onLoad: function (object) {
+          if (objFileList[fileIndex].onLoad)
+            objFileList[fileIndex].onLoad(object);
           fileIndex++;
           if (fileIndex < objFileList.length) {
             iterateLoadForIt();
@@ -142,10 +153,11 @@ export default class ZThree {
             if (onAllLoad) onAllLoad();
           }
         },
-        onProgress: function(xhr) {
-          if (objFileList[fileIndex].onProgress) objFileList[fileIndex].onProgress(xhr, fileIndex);
+        onProgress: function (xhr) {
+          if (objFileList[fileIndex].onProgress)
+            objFileList[fileIndex].onProgress(xhr, fileIndex);
           if (onProgress) onProgress(xhr, fileIndex);
-        }
+        },
       });
     }
     iterateLoadForIt();

@@ -44,53 +44,9 @@ export default {
                     name: '首页',
                     goFunction: () => {
                         loaderParkWater(window.app)
-                        // app.flyTo({
-                        //     position: app.cameraPosition,
-                        //     controls: app.controlsTarget
-                        // });
                     },
                     backFunction: () => { }
                 },
-                // {
-                //     name: '楼层管理',
-                //     goFunction: () => {
-                //         loaderFloorManage(window.app)
-                //     },
-                //     backFunction: () => {
-                // destroyControlsGroup(window.app, 'floorText-3d')
-                //         this.isShowFloorBack = false
-                //         this.roomTooltipStyle.show = false
-                //         if (this.curFloorModel && this.currentLayer !== '全楼') {
-                //             this.currentLayer = '全楼'
-                //             setModelLayer(window.app, this.curFloorModel, this.currentLayer, this.layerData,
-                //                 () => {
-                //                     setModelDefaultMaterial(window.app)
-                //                     this.curFloorModel = null
-                //                 }
-                //             )
-                //         } else {
-                //             setModelDefaultMaterial(window.app)
-                //         }
-                //     }
-                // }
-                //  {
-                //     name: '电力监测',
-                //     goFunction: () => {
-                //         loaderParkElectricity(window.app)
-                //     },
-                //     backFunction: () => {
-                //         destroyParkElectricity(window.app)
-                //     }
-                // }, 
-                // {
-                //     name: '水力监测',
-                //     goFunction: () => {
-                //         loaderParkWater(window.app)
-                //     },
-                //     backFunction: () => {
-                //         destroyParkWater(window.app)
-                //     }
-                // }
                 {
                     name: '气罐压力监测',
                     goFunction: () => {
@@ -146,11 +102,8 @@ export default {
                     视频: cameraUrls[obj.name.substr(0, 4)]
                 }, obj)
             } else {
-                const roomName = obj.name.substr(0, 3)
                 this.roomTooltipStyle = Object.assign({
-                    楼栋: this.curFloorModel.name,
-                    楼层: this.currentLayer,
-                    房间号: roomName,
+                    设备号: obj.name,
                     度数: parkData[this.curFloorModel.name][this.currentLayer][roomName][obj.type]
                 }, obj)
             }
@@ -168,12 +121,12 @@ export default {
             // this.isShowFloorBack = false
             // this.roomTooltipStyle.show = false
             this.currentLayer = '全楼'
-            this.$EventBus.$emit('roomUI',{
-                            isShow:false,
-                            name:''
-                        })
+            this.$EventBus.$emit('roomUI', {
+                isShow: false,
+                name: ''
+            })
             window.app.flyTo({
-                
+
                 position: [31.10, 13.77, -16.62],
                 controls: [-3.62, 2.18, -11.89],
 
@@ -186,10 +139,10 @@ export default {
             // setModelLayer(window.app, this.curFloorModel, layer, this.layerData)
 
             if (this.currentLayer === '全楼') {
-                this.$EventBus.$emit('roomUI',{
-                            isShow:false,
-                            name:''
-                        })
+                this.$EventBus.$emit('roomUI', {
+                    isShow: false,
+                    name: ''
+                })
                 window.app.flyTo(
                     {
                         position: [31.10, 13.77, -16.62],
@@ -215,7 +168,7 @@ export default {
                 window.app.flyTo(
                     {
                         position: [5.99, 6.57, -24.19],
-                        controls: [2.17, 1.73,-19.22],
+                        controls: [2.17, 1.73, -19.22],
                         done: () => {
                             this.$EventBus.$emit('roomUI', {
                                 isShow: true,
@@ -227,9 +180,11 @@ export default {
             }
         },
         // 控制roomTooltipStyle隐藏事件
-        roomTooltipStyleShowEvent() {
-            this.roomTooltipStyle.show = false
+        roomTooltipStyleShowEvent(e) {
+            if(e.target.tagName.toLowerCase() !== 'button'){
+                this.roomTooltipStyle.show = false
             window.removeEventListener('mousedown', this.roomTooltipStyleShowEvent)
+            }
         }
 
     },
@@ -243,7 +198,7 @@ export default {
         //使标签在显示后再点击鼠标隐藏标签
         roomTooltipStyle() {
             if (this.roomTooltipStyle.show) {
-                setTimeout(() => { window.addEventListener('mousedown', this.roomTooltipStyleShowEvent) }, 100)
+                setTimeout(() => { window.addEventListener('mousedown', this.roomTooltipStyleShowEvent) }, 50)
             }
         }
     }

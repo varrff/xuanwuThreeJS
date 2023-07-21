@@ -31,12 +31,12 @@ export function createParkWater(app) {
         //楼栋
         // const value = 480;
         const value = Math.floor(Math.random() * (481 - 300) + 300);
+        obj.userData.value = value
         //    如果大于设定值：460的处理逻辑
         // console.log(obj.name);
         if (value > 460) {
-          // console.log(1);
-          console.log(obj);
-          
+
+        
           // obj.traverse(c=>{
             // obj.material = floorBaseMaterial3;
             const objMaterial = obj.material
@@ -51,7 +51,7 @@ export function createParkWater(app) {
           // app.selectedObjects.push(obj);
           setTimeout(() => {
             if (notifIndex < 6) {
-              Notification({
+              Notification({ 
                 title: "警告",
                 // message: `${floorName}的${layerName}${roomName}的用电量为${value}度，已超出平均值，请留意`,
                 message: `1号楼2层气瓶间23号气瓶，已超出平均值，请留意`,
@@ -70,28 +70,25 @@ export function createParkWater(app) {
     (activeObj, app, event) => {
       if (activeObj.object) {
         const obj = activeObj.object;
-        console.log(obj.name);
-        const floorName = obj.parent.parent.name;
-        const layerName = obj.parent.name.substr(0, 2);
-        const roomName = obj.name.substr(0, 3);
-        // const value = parkData[floorName][layerName][roomName]["水"];
-        const value = 20;
+        console.log(obj);
+        const value =  obj.userData.value
         EventBus.$emit("changeTooltip", {
-          楼栋: floorName,
-          楼层: layerName,
-          房间号: roomName,
+          // 楼栋: floorName,
+          // 楼层: layerName,
+          房间号: obj.parent.name,
           度数: value,
-          name: obj.name,
-          type: "水",
+          设备号: obj.name,
+          type: "气压启动盘",
           x: event.x,
           y: event.y,
           show: true,
         });
-      } else {
-        EventBus.$emit("changeTooltip", {
-          show: false,
-        });
-      }
+      } 
+      // else {
+      //   EventBus.$emit("changeTooltip", {
+      //     show: false,
+      //   });
+      // }
     },
     app.rayModel,
     "click"
