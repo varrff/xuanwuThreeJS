@@ -24,7 +24,7 @@
 import { loaderFloorManage, setModelLayer } from '@/three/floorManage'
 import { setModelDefaultMaterial, destroyControlsGroup } from '@/three/loaderModel'
 import { loaderParkElectricity, destroyParkElectricity } from '@/three/parkElectricity'
-import { loaderParkWater, destroyParkWater } from '@/three/parkWater'
+import { loaderParkWater, destroyParkWater, createParkWater } from '@/three/parkWater'
 import { parkData, cameraUrls } from '@/assets/mock/mock'
 import layer from '@/components/layer'
 import tooltip from '@/components/tooltip'
@@ -81,6 +81,7 @@ export default {
             layerData: [],
             // 楼层模型
             curFloorModel: null,
+            roomName:null
         }
     },
     mounted() {
@@ -109,9 +110,21 @@ export default {
             }
         })
 
-        this.$EventBus.$on('changeTooltip', (obj) => {
-            this.roomTooltipStyle = obj;
+        this.$EventBus.$on('changeTooltip', (obj,isNew) => {
+            if(!isNew){
+                this.roomTooltipStyle = obj;
+            }else{
+                this.roomName = obj['房间号']
+                setTimeout(()=>{
+                    this.roomTooltipStyle = obj;
+                },1000)
+            }
+            
         });
+
+        setTimeout(()=>{
+            this.onDeviceChanged()
+        },10000)
     },
     methods: {
         activeFun(item, index) {
@@ -185,6 +198,12 @@ export default {
                 this.roomTooltipStyle.show = false
             window.removeEventListener('mousedown', this.roomTooltipStyleShowEvent)
             }
+        },
+
+        // 通知three设备发生变化
+        onDeviceChanged(){
+            console.log(1);
+            createParkWater(window.app,'汽钢瓶1-1007',true,470)
         }
 
     },
@@ -200,7 +219,14 @@ export default {
             if (this.roomTooltipStyle.show) {
                 setTimeout(() => { window.addEventListener('mousedown', this.roomTooltipStyleShowEvent) }, 50)
             }
+        },
+        roomName(newVal){
+            console.log(newVal);
+            if(newVal==='room1'){
+                this.changeLayer('room1')
+            }
         }
+        
     }
 }
 </script>
