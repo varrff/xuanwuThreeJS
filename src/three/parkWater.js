@@ -3,6 +3,7 @@ import {
   floorBaseMaterial,
   floorBaseMaterial2,
   floorBaseMaterial3,
+  material4
 } from "@/three/material";
 import { Notification } from "element-ui";
 import EventBus from "@/bus";
@@ -12,6 +13,12 @@ import * as THREE from "three";
 监测
 */
 export function loaderParkWater() {
+  app.model.traverse(obj=>{
+    if(obj.name.indexOf('墙体')>-1){
+        console.log(obj);
+        obj.material = material4
+    }
+  })
   app.flyTo({
     position: [6.4, 31.19, 52.18],
     controls: [-6.64, 12.05, -12.11],
@@ -122,28 +129,29 @@ export function createParkWater(app, qipingName, isNew, newValue) {
 
         // 将标准化设备坐标转换为屏幕像素坐标
         // 获取窗口的宽高
-const width = window.innerWidth
-const height = window.innerHeight
-// 坐标转换时使用窗口宽高
-const screenPosition = standardVector
-  .clone()
-  .multiplyScalar(width / 2) 
-  .addScalar(width / 2, height / 2)
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // 坐标转换时使用窗口宽高
+        const screenPosition = standardVector
+          .clone()
+          .multiplyScalar(width / 2)
+          .addScalar(width / 2, height / 2);
 
         // screenPosition就是模型在屏幕上的像素坐标点
-        console.log(screenPosition);
-        EventBus.$emit("changeTooltip", {
-          // 楼栋: floorName,
-          // 楼层: layerName,
-          房间号: obj.parent.name,
-          度数: value,
-          设备号: obj.name,
-          type: "气压启动盘",
-          x: screenPosition.x,
-          y: screenPosition.y,
-          show: true,
-        },
-        true
+        EventBus.$emit(
+          "changeTooltip",
+          {
+            // 楼栋: floorName,
+            // 楼层: layerName,
+            房间号: obj.parent.name,
+            度数: value,
+            设备号: obj.name,
+            type: "气压启动盘",
+            x: screenPosition.x,
+            y: screenPosition.y,
+            show: true,
+          },
+          true
         );
         Notification({
           title: "警告",

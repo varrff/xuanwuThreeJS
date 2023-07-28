@@ -2,9 +2,9 @@
   <div class="main">
     <loader :number="loadingNumber" v-if="loadingNumber !== 100"></loader>
     <big-control class="control"></big-control>
-            <!-- room信息框 -->
-            <!-- <qiguan-echarts v-if="qigangIsShow" class="qiguan-echarts"/> -->
-            <room-echarts v-if="roomIsShow"></room-echarts>
+    <!-- room信息框 -->
+    <!-- <qiguan-echarts v-if="qigangIsShow" class="qiguan-echarts"/> -->
+    <room-echarts :data="roomData"></room-echarts>
     <div id="screen" class="screen"></div>
   </div>
 </template>
@@ -22,17 +22,18 @@ import { CSS3DRenderer } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import { cssRender } from '@/three/cssRender'
 import { createReprocessing } from '@/three/reprocessing';
 import { darkMaterial } from '@/three/material'
-import {addParkWater} from '@/three/parkWater'
+import { addParkWater } from '@/three/parkWater'
 import { primaryTexture, secondaryTexture, trunkTexture } from '@/three/texture'
-import {createWebSocket} from '@/api/index'
-let app, camera, scene, renderer, controls, clock, reprocessing, materials={}
+import { createWebSocket } from '@/api/index'
+let app, camera, scene, renderer, controls, clock, reprocessing, materials = {}
 export default {
   name: 'HomeView',
-  components: { bigControl, loader, QiguanEcharts ,RoomEcharts},
-  data(){
-    return{
+  components: { bigControl, loader, QiguanEcharts, RoomEcharts },
+  data() {
+    return {
       loadingNumber: 0,
-      roomIsShow:false
+      roomIsShow: false,
+      roomData: null
     }
   },
   methods: {
@@ -112,27 +113,38 @@ export default {
         obj.material = materials[obj.uuid];
         delete materials[obj.uuid];
       }
+    },
+    // 获取总体数据
+    getRoomData() {
+      this.roomData = {
+        name: '总体状态',
+        type: 'overall',
+        //模拟放假数据
+        运行状态: '正常',
+        报警设备: 0
+        
+      }
     }
-
   },
   mounted() {
-    createWebSocket().then(ws=>{
-      ws.onmessage = e=>{
+    createWebSocket().then(ws => {
+      ws.onmessage = e => {
         console.log(1);
-            console.log(e);
-        }  
-    }).catch(err=>{
+        console.log(e);
+      }
+    }).catch(err => {
       console.log(err);
     })
     this.$EventBus.$on('roomUI', data => {
-      
-      this.roomIsShow=data.isShow
+
+      this.roomData = data
       // thisdata.name
-        console.log( this.roomIsShow);
     })
     this.$EventBus.$on('changeLoaidng', (val) => {
-        this.loadingNumber = val;
-      });
+      this.loadingNumber = val;
+    });
+    // 模拟首次获取楼层数据
+    this.getRoomData()
     this.initZThree();
   }
 }
@@ -168,6 +180,7 @@ export default {
   top: 0;
   left: 0;
 }
+
 // .qiguan-echarts{
 //   position: fixed;
 //   top: 10vh;

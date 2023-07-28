@@ -30,6 +30,13 @@ export const darkMaterial =new THREE.MeshBasicMaterial({
     color:'#000'
 })
 
+// 墙体
+export const material4 = new THREE.MeshBasicMaterial({
+  transparent: true,
+  opacity: 0.5,
+  color: 0x0000ff,
+});
+
 // 地图线材质
 export const secondaryMaterial = new THREE.MeshBasicMaterial({
     map: secondaryTexture,

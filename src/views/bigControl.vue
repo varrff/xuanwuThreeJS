@@ -7,10 +7,10 @@
             </label>
         </form>
         <!-- 楼层返回 -->
-        <div class="back animated fadeIn" @click="backFloorBase" v-if="isShowFloorBack">
+        <!-- <div class="back animated fadeIn" @click="backFloorBase" v-if="isShowFloorBack">
             <img src="./../assets/image/back.png" alt="" />
             <p>返回</p>
-        </div>
+        </div> -->
         <!-- 楼层UI -->
         <layer v-if="isShowFloorBack" :layers="layerData" :active="currentLayer" @change="changeLayer"
             :styles="{ top: '55%', left: '72%', height: '400px' }"></layer>
@@ -44,6 +44,9 @@ export default {
                     name: '首页',
                     goFunction: () => {
                         loaderParkWater(window.app)
+                        this.$EventBus.$emit('roomUI', {
+                                type:'all'
+                            })
                     },
                     backFunction: () => { }
                 },
@@ -121,7 +124,7 @@ export default {
             }
             
         });
-
+        // 模拟报警
         setTimeout(()=>{
             this.onDeviceChanged()
         },10000)
@@ -134,10 +137,9 @@ export default {
             // this.isShowFloorBack = false
             // this.roomTooltipStyle.show = false
             this.currentLayer = '全楼'
-            this.$EventBus.$emit('roomUI', {
-                isShow: false,
-                name: ''
-            })
+            // this.$EventBus.$emit('roomUI', {
+            //     name: ''
+            // })
             window.app.flyTo({
 
                 position: [31.10, 13.77, -16.62],
@@ -170,8 +172,7 @@ export default {
                         controls: [15.28, 4.97, -6.04],
                         done: () => {
                             this.$EventBus.$emit('roomUI', {
-                                isShow: true,
-                                name: 'room1'
+                                type:'room1'
                             })
                         }
                     }
@@ -184,8 +185,7 @@ export default {
                         controls: [2.17, 1.73, -19.22],
                         done: () => {
                             this.$EventBus.$emit('roomUI', {
-                                isShow: true,
-                                name: 'room2'
+                                type:'room2'
                             })
                         }
                     }
@@ -200,9 +200,10 @@ export default {
             }
         },
 
-        // 通知three设备发生变化
+        // 设备报警通知three设备发生变化
         onDeviceChanged(){
             console.log(1);
+            // 模拟websock接收到的参数
             createParkWater(window.app,'汽钢瓶1-1007',true,470)
         }
 
