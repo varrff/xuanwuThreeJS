@@ -38,13 +38,13 @@
             {
               type: 'gauge',
               min: 0, // 最小值
-               max: 500, // 最大值
+              max: 600, // 最大值
               axisLine: {
                 lineStyle: {
-                  width: 25,
+                  width: 18,
                   color: [
                     [0.3, '#67e0e3'],
-                    [0.7, '#37a2da'],
+                    [0.8, '#37a2da'],
                     [1, '#fd666d']
                   ]
                 }
@@ -63,17 +63,17 @@
                 }
               },
               splitLine: {
-                distance: -30,
-                length: 30,
+                distance: 10,
+                length: 10,
                 lineStyle: {
-                  color: '#fff',
-                  width: 4
+                  color: '#74e4e4',
+                  width: 1
                 }
               },
               axisLabel: {
                 color: 'inherit',
-                distance: 40,
-                fontSize: 10
+                distance: 30,
+                fontSize: 15
               },
               detail: {
                 valueAnimation: true,

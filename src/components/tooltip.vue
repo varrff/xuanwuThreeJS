@@ -5,11 +5,12 @@
         <h6>楼层: {{ data['楼层'] }}</h6> -->
 
       <div v-if="data['type'] !== '摄像头'">
+
+        <h6 class="shebeiName">{{ data['设备号'] }}</h6>
+        <h6 class="qiya-value">气压值：<span>{{ data['度数'] }}</span></h6>
+        <qiguan-echarts :newValue="data['度数']" v-if="true" class="qiguan-echarts" />
         <button>历史记录</button>
       <button @click="clickCamera()">摄像头</button>
-        <h6>设备号：{{ data['设备号'] }}</h6>
-        <h6>气压值：{{ data['度数'] }}</h6>
-        <qiguan-echarts :newValue="data['度数']" v-if="true" class="qiguan-echarts" />
       </div>
       <div v-else>
         <h6>摄像头：{{ data['name'] }}</h6>
@@ -20,7 +21,7 @@
 </template>
   
 <script>
-import QiguanEcharts from '@/components/QiguanEcharts.vue'
+import QiguanEcharts from '@/components/QiguanEcharts.vue' 
 import EventBus from "@/bus";
 export default {
   name: '',
@@ -49,10 +50,21 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-button {
-  font-size: 25px;
-  cursor: pointer;
+.shebeiName{
+  color: #add7ff;
+  font-size: 35px !important;
+  font-style: italic;
+  font-family: "Microsoft YaHei", "SimHei", "Heiti SC", STXihei, "WenQuanYi Micro Hei", sans-serif;
 }
+.qiya-value{
+  margin-top: 45px;
+  font-size: 25px !important;
+  span{
+    color: #ffffff;
+    z-index: 10;
+  }
+}
+
 
 .qiguan-echarts {
   // margin-top: -30%;
@@ -61,6 +73,7 @@ button {
 .tooltip .bottom {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .tooltip-wrapper {
@@ -86,8 +99,9 @@ button {
   top: -83px;
   opacity: 1;
   border: 1px solid #2294ff;
-  background: linear-gradient(to bottom, #081a30, #003678);
+  // background: linear-gradient(to bottom, #081a30, #003678);
   box-shadow: inset 0 0 10px rgba(13, 150, 255, 0.8);
+  overflow: hidden;
 }
 
 .tipnav {
@@ -136,6 +150,57 @@ button {
 .tooltip-wrapper .tooltip h6 {
   font-size: 24px;
   height: 36px;
+}
+// button
+button {
+ --glow-color: rgb(217, 176, 255);
+ --glow-spread-color: rgba(191, 123, 255, 0.781);
+ --enhanced-glow-color: rgb(231, 206, 255);
+ --btn-color: rgb(100, 61, 136);
+ border: .25em solid var(--glow-color);
+ padding: .5em 1.5em;
+ color: var(--glow-color);
+ font-size: 16px;
+ font-weight: bold;
+ background-color: var(--btn-color);
+ border-radius: 1em;
+ outline: none;
+ box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 1em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+ text-shadow: 0 0 .5em var(--glow-color);
+ position: relative;
+ transition: all 0.3s;
+ cursor:pointer;
+//  margin-left: 5%;
+}
+
+button::after {
+ pointer-events: none;
+ content: "";
+ position: absolute;
+ top: 120%;
+ left: 0;
+ height: 100%;
+ width: 100%;
+ background-color: var(--glow-spread-color);
+ filter: blur(2em);
+ opacity: .7;
+ transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+}
+
+button:hover {
+ color: var(--btn-color);
+ background-color: var(--glow-color);
+ box-shadow: 0 0 1em .25em var(--glow-color),
+        0 0 4em 2em var(--glow-spread-color),
+        inset 0 0 .75em .25em var(--glow-color);
+}
+
+button:active {
+ box-shadow: 0 0 0.6em .25em var(--glow-color),
+        0 0 2.5em 2em var(--glow-spread-color),
+        inset 0 0 .5em .25em var(--glow-color);
 }
 </style>
   
